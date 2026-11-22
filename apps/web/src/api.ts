@@ -259,10 +259,25 @@ export type AaSuggestResponse = {
   stale?: true;
 };
 
+const SESSION_CHECK_TIMEOUT_MS = 5000;
+
 /** Auth — these three never throw UnauthorizedError by design (used pre/post login). */
 export const auth = {
-  session: () => fetch(`${base}/auth/session`, { credentials: 'include' })
-    .then((r) => r.json() as Promise<SessionResponse>),
+  session: async (timeoutMs = SESSION_CHECK_TIMEOUT_MS): Promise<SessionResponse> => {
+    const ac = new AbortController();
+    const timer = setTimeout(() => ac.abort(), timeoutMs);
+    try {
+      const r = await fetch(`${base}/auth/session`, {
+        credentials: 'include',
+        cache: 'no-store',
+        signal: ac.signal,
+      });
+      if (!r.ok) throw new Error(`session check failed (${r.status})`);
+      return await r.json() as SessionResponse;
+    } finally {
+      clearTimeout(timer);
+    }
+  },
 
   login: async (password: string): Promise<{ ok: true } | { error: string; retryAfter?: number }> => {
     const body: LoginRequest = { password };

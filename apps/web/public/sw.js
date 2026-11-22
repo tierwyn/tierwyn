@@ -1,8 +1,9 @@
-// ponytail: network-only SW. Exists only so Chrome Android offers "Install app".
+// ponytail: push-only SW (no fetch listener — Chrome 108+ does not require one for
+// PWA installability, and a pass-through fetch handler forces SW boot on every
+// navigation/refresh and can hang reloads on stalled sockets).
 // Add offline precache when offline Tierwyn becomes a real ask.
 self.addEventListener('install',    (e) => self.skipWaiting());
 self.addEventListener('activate',   (e) => e.waitUntil(self.clients.claim()));
-self.addEventListener('fetch',     (e) => e.respondWith(fetch(e.request)));
 
 self.addEventListener('push', (e) => {
   let d = {};
