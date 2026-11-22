@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-22
+
+### Performance
+
+- Replaced `O(C × E)` correlated subqueries in `listCheckpoints()` with a two-query `O(E + C log P)` match, eliminating multi-second main-thread event-loop freezes on long conversations with hundreds of checkpoints (e.g. 19.2 s → 43 ms on a 348-checkpoint chat).
+- Added an indexed pre-check in `upsertDiscoveredModels()` so model discovery skips full `events` table scans when no enabled discovered models are stale, cutting post-restart boot discovery freezes on large databases.
+
+### Fixed
+
+- Added a 5 s `AbortController` timeout, `cache: 'no-store'`, and non-OK response guard to `auth.session()` so stalled `/auth/session` checks abort and retry cleanly instead of hanging indefinitely on the `INITIALIZING…` splash screen.
+- Removed the no-op `fetch` pass-through listener from the PWA service worker (`sw.js`) so refreshes no longer block on service worker boot or stalled sockets (push notifications remain unchanged).
+- Updated the `tierwin` npm alias package (`0.1.1`) to depend on `tierwyn >=0.1.0`.
+
 ## [0.1.1] - 2026-11-22
 
 ### Fixed
