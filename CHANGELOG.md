@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-Initial public release of Tierwyn: a single-operator meta harness for driving multiple local AI coding agents from a web browser.
+Initial public release of Tierwyn: a single-operator meta-harness for driving multiple local AI coding agents from a web browser.
 
 #### Core Runtime & Adapters
 - Multi-adapter architecture supporting 15 CLI coding agents (Claude Code, Pi, OpenCode, KiloCode, Antigravity, Cursor, Hermes, Codex, Grok Build, Kiro, Qwen Code, OpenClaw, Kimi Code, GitHub Copilot, and DeepSeek), plus the Grok Bot desktop app.

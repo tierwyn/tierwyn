@@ -6,7 +6,7 @@
 
 *Tiers of agents.*
 
-Tierwyn, said "TEER-win", is **a meta harness for coding agents**. One browser UI for the agents you already run, at your desk or on your phone. Hand work across them and get every result back in a single conversation. Site: [tierwyn.dev](https://tierwyn.dev). GitHub: [tierwyn/tierwyn](https://github.com/tierwyn/tierwyn).
+Tierwyn, said "TEER-win", is **a meta-harness for coding agents**. One browser UI for the agents you already run, at your desk or on your phone. Hand work across them and get every result back in a single conversation. Site: [tierwyn.dev](https://tierwyn.dev). GitHub: [tierwyn/tierwyn](https://github.com/tierwyn/tierwyn).
 
 Tierwyn drives the agent CLIs you have installed and signed in to, so every model call goes through that CLI. It streams their output to the browser as one normalised event stream and keeps conversations in SQLite.
 

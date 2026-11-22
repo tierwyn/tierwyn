@@ -35,7 +35,7 @@ export function argvForInstall(userArgv, home = os.homedir()) {
 
 export function runTierwyn(userArgv = process.argv.slice(2)) {
   if (process.platform === 'win32') {
-    console.error('tierwyn requires Linux/macOS bash');
+    console.error('tierwyn requires Linux (bash + systemd)');
     return 1;
   }
 

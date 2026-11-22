@@ -1,7 +1,7 @@
 {
   "name": "tierwyn",
   "version": "0.1.0",
-  "description": "Tierwyn installer CLI — global launcher for Tierwyn, a meta harness for coding agents",
+  "description": "Tierwyn installer CLI — global launcher for Tierwyn, a meta-harness for coding agents",
   "license": "MIT",
   "repository": {
     "type": "git",

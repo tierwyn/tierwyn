@@ -1,6 +1,6 @@
 # tierwyn
 
-Global npm launcher for [Tierwyn](https://github.com/tierwyn/tierwyn) — a meta harness for coding agents.
+Global npm launcher for [Tierwyn](https://github.com/tierwyn/tierwyn) — a meta-harness for coding agents.
 
 ## Install
 
@@ -19,4 +19,4 @@ tierwyn doctor       # health checks
 tierwyn help         # full command list
 ```
 
-Requires **Linux or macOS** with `bash` (Node ≥ 22.13).
+Requires **Linux** with `bash` and systemd (Node ≥ 22.13).

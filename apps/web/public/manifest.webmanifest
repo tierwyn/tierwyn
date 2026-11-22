@@ -1,7 +1,7 @@
 {
   "name": "Tierwyn",
   "short_name": "Tierwyn",
-  "description": "A meta harness for coding agents.",
+  "description": "A meta-harness for coding agents.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
