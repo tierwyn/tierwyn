@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const require = createRequire(import.meta.url);
+const tierwynRoot = path.dirname(require.resolve('tierwyn/package.json'));
+const tierwynBin = path.join(tierwynRoot, 'bin', 'tierwyn');
+
+const result = spawnSync(process.execPath, [tierwynBin, ...process.argv.slice(2)], {
+  stdio: 'inherit',
+});
+
+if (result.error) {
+  console.error(`tierwin: failed to run tierwyn: ${result.error.message}`);
+  process.exit(1);
+}
+if (result.signal) {
+  process.exit(128 + (result.signal === 'SIGTERM' ? 15 : 1));
+}
+process.exit(result.status ?? 1);

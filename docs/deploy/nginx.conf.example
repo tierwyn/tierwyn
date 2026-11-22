@@ -1,0 +1,83 @@
+# Tierwyn: nginx reverse-proxy example
+# Replace commandcentre.example.com with your actual hostname.
+# Obtain a TLS certificate first (e.g. with certbot / Let's Encrypt).
+#
+# Usage:
+#   cp nginx.conf.example /etc/nginx/sites-available/tierwyn
+#   ln -s /etc/nginx/sites-available/tierwyn /etc/nginx/sites-enabled/
+#   # Edit the hostname and cert paths; optionally enable the LAN-subnet block
+#   sudo nginx -t && sudo systemctl reload nginx
+#
+# See docs/deploy/deployment.md for the full runbook.
+
+# Redirect plain HTTP to HTTPS.
+server {
+    listen 80;
+    listen [::]:80;
+    server_name commandcentre.example.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name commandcentre.example.com;
+
+    # -------------------------------------------------------------------------
+    # TLS: replace with your certificate paths (e.g. from certbot).
+    # -------------------------------------------------------------------------
+    ssl_certificate     /etc/letsencrypt/live/commandcentre.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/commandcentre.example.com/privkey.pem;
+
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    # -------------------------------------------------------------------------
+    # Optional: restrict access to a LAN subnet (secondary layer; the
+    # password is the primary gate). Remove or comment out to allow any IP.
+    # -------------------------------------------------------------------------
+    # allow 192.168.1.0/24;
+    # deny all;
+
+    # -------------------------------------------------------------------------
+    # Common proxy headers: needed for Express trust-proxy and req.ip.
+    # -------------------------------------------------------------------------
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+
+    # Forward cookies so the session cookie reaches the backend.
+    proxy_pass_header  Cookie;
+
+    # -------------------------------------------------------------------------
+    # HTTP + WebSocket upgrade: single location block handles both.
+    #
+    # When a client sends an HTTP upgrade request (the WebSocket handshake),
+    # nginx forwards the Connection and Upgrade headers so the web preview
+    # can complete the 101 Switching Protocols handshake. Without these two
+    # headers the upgrade is silently dropped and the WS connection fails.
+    # -------------------------------------------------------------------------
+    location / {
+        proxy_pass         http://127.0.0.1:4173;
+        proxy_http_version 1.1;
+
+        # WebSocket upgrade headers: REQUIRED for WS to work through the proxy.
+        proxy_set_header   Upgrade    $http_upgrade;
+        proxy_set_header   Connection $connection_upgrade;
+
+        # Increase timeouts for long-lived WS connections.
+        proxy_read_timeout  3600s;
+        proxy_send_timeout  3600s;
+    }
+}
+
+# Upgrade map: place this in the http {} context (e.g. in /etc/nginx/nginx.conf
+# or in a conf.d/ include), NOT inside the server block above.
+#
+# map $http_upgrade $connection_upgrade {
+#     default  upgrade;
+#     ''       close;
+# }

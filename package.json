@@ -1,0 +1,60 @@
+{
+  "name": "tierwyn",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A meta harness for coding agents — one browser UI for the agents you already run",
+  "license": "MIT",
+  "author": "The Tierwyn Authors",
+  "homepage": "https://github.com/tierwyn/tierwyn#readme",
+  "bugs": {
+    "url": "https://github.com/tierwyn/tierwyn/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tierwyn/tierwyn.git"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "workspaces": [
+    "apps/server",
+    "apps/web",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev:server": "npm run dev --workspace=apps/server",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
+    "build": "npm run build --workspaces",
+    "deploy:prod": "npm run build --workspace=apps/web && sh -c 'for b in prod-web; do u=tierwyn-$b; systemctl --user restart $u; done'",
+    "deploy:prod:full": "npm run build --workspaces && sh -c 'for b in prod prod-web; do u=tierwyn-$b; systemctl --user restart $u; done'",
+    "typecheck": "npm run docs:check && npm run typecheck --workspaces --if-present",
+    "docs:check": "node scripts/check-docs.mjs",
+    "version:check": "node scripts/version-check.mjs",
+    "package:plugins": "node scripts/package-plugins.mjs",
+    "docs:generate-reference": "node scripts/generate-package-reference.mjs",
+    "tierwyn:start": "sh -c 'for b in prod prod-web; do u=tierwyn-$b; systemctl --user start $u; done'",
+    "tierwyn:stop": "sh -c 'for b in prod prod-web; do u=tierwyn-$b; systemctl --user stop $u; done'",
+    "tierwyn:restart": "sh -c 'for b in prod prod-web; do u=tierwyn-$b; systemctl --user restart $u; done'",
+    "tierwyn:status": "sh -c 'for b in prod prod-web; do u=tierwyn-$b; systemctl --user status $u --no-pager; done'",
+    "tierwyn:start:all": "sh -c 'for b in prod prod-web piper kokoro grokbot; do u=tierwyn-$b; systemctl --user cat $u >/dev/null 2>&1 && systemctl --user start $u; done'",
+    "tierwyn:start:grokbot": "sh -c 'for b in grokbot; do u=tierwyn-$b; systemctl --user start $u; done'",
+    "tierwyn:start:kokoro": "sh -c 'for b in kokoro; do u=tierwyn-$b; systemctl --user start $u; done'",
+    "tierwyn:start:piper": "sh -c 'for b in piper; do u=tierwyn-$b; systemctl --user start $u; done'",
+    "tierwyn:start:prod": "sh -c 'for b in prod prod-web; do u=tierwyn-$b; systemctl --user start $u; done'",
+    "tierwyn:stop:all": "sh -c 'for b in prod prod-web piper kokoro grokbot; do u=tierwyn-$b; systemctl --user cat $u >/dev/null 2>&1 && systemctl --user stop $u; done'",
+    "tierwyn:stop:grokbot": "sh -c 'for b in grokbot; do u=tierwyn-$b; systemctl --user stop $u; done'",
+    "tierwyn:stop:kokoro": "sh -c 'for b in kokoro; do u=tierwyn-$b; systemctl --user stop $u; done'",
+    "tierwyn:stop:piper": "sh -c 'for b in piper; do u=tierwyn-$b; systemctl --user stop $u; done'",
+    "tierwyn:stop:prod": "sh -c 'for b in prod prod-web; do u=tierwyn-$b; systemctl --user stop $u; done'",
+    "tierwyn:restart:all": "sh -c 'for b in prod prod-web piper kokoro grokbot; do u=tierwyn-$b; systemctl --user cat $u >/dev/null 2>&1 && systemctl --user restart $u; done'",
+    "tierwyn:restart:grokbot": "sh -c 'for b in grokbot; do u=tierwyn-$b; systemctl --user restart $u; done'",
+    "tierwyn:restart:kokoro": "sh -c 'for b in kokoro; do u=tierwyn-$b; systemctl --user restart $u; done'",
+    "tierwyn:restart:piper": "sh -c 'for b in piper; do u=tierwyn-$b; systemctl --user restart $u; done'",
+    "tierwyn:restart:prod": "sh -c 'for b in prod prod-web; do u=tierwyn-$b; systemctl --user restart $u; done'"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.8.3"
+  }
+}

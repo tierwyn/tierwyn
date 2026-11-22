@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Typecheck + tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install system dependencies (ffmpeg)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Install dependencies
+        run: npm ci
+
+      # packages/shared must be built before anything that imports it.
+      - name: Build shared package
+        run: npm run build --workspace=packages/shared
+
+      # Root typecheck = docs freshness harness (scripts/check-docs.mjs) + per-workspace tsc.
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Server tests
+        run: npm run test --workspace=apps/server
+
+      - name: Web tests
+        run: npm run test --workspace=apps/web
+
+      # Catches build-only failures (vite bundle, server migration copy) that tsc --noEmit misses.
+      - name: Build all workspaces
+        run: npm run build
+
+      - name: Node package smoke
+        run: node scripts/package-node-smoke.mjs

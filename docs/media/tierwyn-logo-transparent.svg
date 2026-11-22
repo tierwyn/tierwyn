@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="256 172 512 680" role="img" aria-label="Tierwyn" fill="#22d3ee">
+  <title>Tierwyn</title>
+
+  <!-- Fused Scaffold (Open ladder with top curved cradle and two chevron rungs below) -->
+  <path d="
+    M 256,172
+    H 304
+    V 276
+    H 382.2
+    A 132 132 0 0 0 382.2,324
+    H 304
+    V 488
+    H 432
+    L 408,512
+    L 432,536
+    H 304
+    V 700
+    H 432
+    L 408,724
+    L 432,748
+    H 304
+    V 852
+    H 256
+    Z
+
+    M 768,172
+    V 852
+    H 720
+    V 748
+    H 592
+    L 616,724
+    L 592,700
+    H 720
+    V 536
+    H 592
+    L 616,512
+    L 592,488
+    H 720
+    V 324
+    H 641.8
+    A 132 132 0 0 1 641.8,276
+    H 720
+    V 172
+    Z
+  "/>
+
+  <!-- Top Parent Core Command Ring (Hollow Annulus in top curved cradle) -->
+  <path fill-rule="evenodd" d="
+    M 512,198
+    A 102 102 0 1 0 512,402
+    A 102 102 0 1 0 512,198
+    Z
+    M 512,249
+    A 51 51 0 1 1 512,351
+    A 51 51 0 1 1 512,249
+    Z
+  "/>
+
+  <!-- Middle Hollow Diamond (50% inner aperture) -->
+  <path fill-rule="evenodd" d="
+    M 512,444 L 580,512 L 512,580 L 444,512 Z
+    M 512,478 L 546,512 L 512,546 L 478,512 Z
+  "/>
+
+  <!-- Bottom Hollow Diamond (50% inner aperture) -->
+  <path fill-rule="evenodd" d="
+    M 512,656 L 580,724 L 512,792 L 444,724 Z
+    M 512,690 L 546,724 L 512,758 L 478,724 Z
+  "/>
+</svg>

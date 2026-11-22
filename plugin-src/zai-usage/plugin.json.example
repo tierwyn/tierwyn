@@ -1,0 +1,49 @@
+{
+  "id": "zai-usage",
+  "name": "Z.AI Usage",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "capabilities": [
+    {
+      "name": "usage.get",
+      "summary": "Current Z.ai quota windows (5h and 7d token limits)",
+      "agentCallable": true,
+      "rateLimitPerMin": 10,
+      "usageProvider": {
+        "label": "Z.AI",
+        "matchAgent": "^(hermes|deepseek|pi)$",
+        "matchModel": ".*glm.*"
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "key": "ZAI_API_KEY",
+      "required": true,
+      "description": "Z.ai API Key (z.ai/model-api-key)"
+    }
+  ],
+  "permissions": [
+    "outbound:https://api.z.ai"
+  ],
+  "settings": [
+    {
+      "key": "baseUrl",
+      "type": "string",
+      "default": "https://api.z.ai",
+      "description": "Z.ai API Base URL"
+    },
+    {
+      "key": "matchAgent",
+      "type": "string",
+      "default": "^(hermes|deepseek|pi)$",
+      "description": "Regex matching agent types for conversation usage"
+    },
+    {
+      "key": "matchModel",
+      "type": "string",
+      "default": ".*glm.*",
+      "description": "Regex matching model names for conversation usage"
+    }
+  ]
+}

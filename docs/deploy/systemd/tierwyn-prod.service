@@ -1,0 +1,20 @@
+# install.sh rewrites %h/Projects/Tierwyn and the node path; edit them if copying by hand
+[Unit]
+Description=Tierwyn prod server
+After=network.target
+
+[Service]
+Environment=NODE_ENV=production
+EnvironmentFile=-/etc/tierwyn/prod.env
+EnvironmentFile=-/etc/tierwyn/prod.env
+WorkingDirectory=%h/Projects/Tierwyn
+ExecStart=%h/.local/bin/node apps/server/dist/index.js
+Restart=on-failure
+RestartSec=3
+MemoryHigh=28G
+MemoryMax=32G
+MemorySwapMax=8G
+
+
+[Install]
+WantedBy=default.target

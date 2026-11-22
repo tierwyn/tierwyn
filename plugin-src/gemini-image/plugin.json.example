@@ -1,0 +1,25 @@
+{
+  "id": "gemini-image",
+  "name": "Gemini Image",
+  "version": "2.0.0",
+  "apiVersion": 1,
+  "capabilities": [
+    {
+      "name": "image.generate",
+      "summary": "Generate or remix images: wallpapers, illustrations, photos, icons, and image edits",
+      "agentCallable": true,
+      "rateLimitPerMin": 4,
+      "timeoutMs": 180000
+    }
+  ],
+  "credentials": [
+    {
+      "key": "GEMINI_API_KEY",
+      "required": true,
+      "description": "Google AI Studio API key (aistudio.google.com/apikey)"
+    }
+  ],
+  "permissions": [
+    "outbound:https://generativelanguage.googleapis.com"
+  ]
+}

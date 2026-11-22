@@ -1,0 +1,20 @@
+[Unit]
+Description=Tierwyn Grok Bot desktop (CDP attach target)
+After=graphical-session.target
+PartOf=graphical-session.target
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+# Tierwyn may start this unit on demand (Settings → Grok Bot → Auto-start).
+# Recommend: systemctl --user disable tierwyn-grokbot.service after install
+# (install the unit, do not enable it: Tierwyn starts it when policy allows).
+# Prefer putting --remote-debugging-port=9333 in ~/.config/grok-bot/electron-flags.conf
+# (survives app updates). The flag below is the belt if that file is missing.
+ExecStart="/opt/Grok Bot/grok-bot" --remote-debugging-port=9333
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,21 @@
+# install.sh rewrites %h/Projects/Tierwyn and the node path; edit them if copying by hand
+[Unit]
+Description=Tierwyn prod web (vite preview of built dist)
+After=tierwyn-prod.service
+Requires=tierwyn-prod.service
+
+[Service]
+EnvironmentFile=-/etc/tierwyn/prod.env
+EnvironmentFile=-/etc/tierwyn/prod.env
+Environment=VITE_PROXY_TARGET=http://127.0.0.1:8788
+# Vite Host-header check (DNS-rebinding). `true` allows any Host so a reverse
+# proxy with an external domain keeps working. Narrow to your public hostname
+# when you can, e.g. Environment=TIERWYN_ALLOWED_HOSTS=tierwyn.example.com
+Environment=TIERWYN_ALLOWED_HOSTS=true
+WorkingDirectory=%h/Projects/Tierwyn/apps/web
+ExecStart=%h/.local/bin/npm run preview -- --host 0.0.0.0 --port 4173
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,47 @@
+.worktrees/
+# Ephemeral agent workspace (spawn handoffs, schedule scratch). Not source.
+.tierwyn/
+node_modules/
+/node_modules
+dist/
+*.db
+data/
+data.bak*/
+.tmp/
+.env
+.env.local
+.kilo/
+.firecrawl
+.playwright-mcp/
+
+# Local operator overrides and additions
+internal/
+CLAUDE.local.md
+AGENTS.local.md
+*.local.md
+
+# Installed plugins are per-instance (import a .tar.gz via Settings → Plugins). Source: plugin-src/.
+/plugins/
+/plugin-src/**/plugin.json
+/plugin-src/**/*.local.*
+
+# OpenClaw: per-workspace identity scaffold + local state (cwd = project root).
+# Global memory stays in ~/.openclaw. These files are recreated by OpenClaw.
+.openclaw/
+/HEARTBEAT.md
+/IDENTITY.md
+/SOUL.md
+/USER.md
+/TOOLS.md
+
+# Agent/process session noise
+.superpowers/
+
+# Build caches
+*.tsbuildinfo
+
+# One-off root probes / playwright dumps (do not re-commit)
+/_*.cjs
+/sidebar-filter.yml
+apps/server/tierwyn-test.txt
+.plugins-test-*

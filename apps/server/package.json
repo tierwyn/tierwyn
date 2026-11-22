@@ -1,0 +1,44 @@
+{
+  "name": "@tierwyn/server",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc && cp -r src/db/migrations/*.sql dist/db/migrations/ && cp src/piper-voices.json dist/ && node ../../scripts/package-node.mjs",
+    "typecheck": "tsc --noEmit",
+    "start": "node dist/index.js",
+    "node": "node dist/node/main.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.301",
+    "@tierwyn/shared": "*",
+    "argon2": "^0.44.0",
+    "better-sqlite3": "^12.11.1",
+    "cookie": "^0.7.2",
+    "croner": "^10.0.1",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "gpt-tokenizer": "^2.9.0",
+    "multer": "^2.2.0",
+    "web-push": "^3.6.7",
+    "ws": "^8.18.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/cookie": "^0.6.0",
+    "@types/express": "^5.0.3",
+    "@types/multer": "^1.4.13",
+    "@types/node": "^22.14.0",
+    "@types/web-push": "^3.6.4",
+    "@types/ws": "^8.5.14",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.19.3",
+    "typescript": "*",
+    "vitest": "^3.2.6"
+  }
+}

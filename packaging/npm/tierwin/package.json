@@ -1,0 +1,20 @@
+{
+  "name": "tierwin",
+  "version": "0.1.0",
+  "description": "Typo-protection alias package for the tierwyn CLI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tierwyn/tierwyn.git"
+  },
+  "bin": {
+    "tierwin": "bin/tierwin"
+  },
+  "dependencies": {
+    "tierwyn": "0.1.0"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "type": "module"
+}

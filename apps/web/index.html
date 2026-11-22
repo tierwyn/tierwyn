@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="img-src 'self' data: blob:;" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+  <meta name="theme-color" content="#050505" />
+  <meta name="description" content="Web UI + API server that drives multiple AI coding agents." />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/svg+xml" href="/tierwyn-icon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tierwyn" />
+  <title>Tierwyn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Syne:wght@400;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet" />
+  <script>
+    // Apply theme before React renders to prevent flash.
+    // localStorage 'theme' holds the chosen mode: 'light', 'dark', 'auto'
+    // (default 'dark').
+    try {
+      var t = localStorage.getItem('theme');
+      var effective;
+      if (t === 'light') effective = 'light';
+      else if (t === 'dark') effective = 'dark';
+      else if (t === 'auto') effective = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+      else effective = 'dark';
+      if (effective === 'light') document.documentElement.dataset.theme = 'light';
+      var c = localStorage.getItem('theme-color') || 'cyan';
+      document.documentElement.dataset.themeColor = c;
+    } catch {}
+  </script>
+  <style>
+    :root {
+      --bg: #050505;
+      --accent: #22d3ee;
+      --text-1: #e0f7fa;
+      --text-3: #49717a;
+      --ui: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+    html[data-theme="light"] {
+      --bg: #f8fafc;
+      --accent: #0f766e;
+      --text-1: #0f172a;
+      --text-3: #64748b;
+    }
+    html:not([data-theme="light"])[data-theme-color="blue"] { --accent: #60a5fa; }
+    html:not([data-theme="light"])[data-theme-color="purple"] { --accent: #c084fc; }
+    html:not([data-theme="light"])[data-theme-color="green"] { --accent: #4ade80; }
+    html:not([data-theme="light"])[data-theme-color="amber"] { --accent: #fbbf24; }
+    html:not([data-theme="light"])[data-theme-color="rose"] { --accent: #fb7185; }
+    html:not([data-theme="light"])[data-theme-color="teal"] { --accent: #2dd4bf; }
+    html:not([data-theme="light"])[data-theme-color="orange"] { --accent: #ff7849; }
+    html:not([data-theme="light"])[data-theme-color="fuchsia"] { --accent: #f472b6; }
+    html:not([data-theme="light"])[data-theme-color="sky"] { --accent: #38bdf8; }
+    html:not([data-theme="light"])[data-theme-color="grey"] { --accent: #94a3b8; }
+    html[data-theme="light"][data-theme-color="cyan"] { --accent: #0f766e; }
+    html[data-theme="light"][data-theme-color="blue"] { --accent: #1d4ed8; }
+    html[data-theme="light"][data-theme-color="purple"] { --accent: #6d28d9; }
+    html[data-theme="light"][data-theme-color="green"] { --accent: #15803d; }
+    html[data-theme="light"][data-theme-color="amber"] { --accent: #b45309; }
+    html[data-theme="light"][data-theme-color="rose"] { --accent: #be123c; }
+    html[data-theme="light"][data-theme-color="teal"] { --accent: #0f766e; }
+    html[data-theme="light"][data-theme-color="orange"] { --accent: #c2410c; }
+    html[data-theme="light"][data-theme-color="fuchsia"] { --accent: #a21caf; }
+    html[data-theme="light"][data-theme-color="sky"] { --accent: #0369a1; }
+    html[data-theme="light"][data-theme-color="grey"] { --accent: #334155; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--text-1);
+    }
+
+    .app-loading-screen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg);
+      background-image: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--accent) 10%, transparent) 0%, transparent 60%);
+      color: var(--text-1);
+      z-index: 99999;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: var(--ui);
+    }
+    .app-loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .app-loading-logo-wrap {
+      position: relative;
+      width: 68px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .app-loading-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 90px;
+      height: 90px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, color-mix(in srgb, var(--accent) 35%, transparent) 0%, transparent 70%);
+      filter: blur(12px);
+      pointer-events: none;
+      animation: tierwyn-glow-breathe 2.4s ease-in-out infinite alternate;
+    }
+    .app-loading-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      fill: var(--accent);
+    }
+    .app-loading-scaffold {
+      opacity: 0.85;
+      animation: tierwyn-scaffold-breathe 2.4s ease-in-out infinite alternate;
+    }
+    .app-loading-core {
+      transform-origin: 512px 300px;
+      animation: tierwyn-core-beat 2.4s ease-in-out infinite;
+    }
+    .app-loading-diamond-middle {
+      transform-origin: 512px 512px;
+      animation: tierwyn-diamond-float-middle 2.4s ease-in-out infinite;
+    }
+    .app-loading-diamond-bottom {
+      transform-origin: 512px 724px;
+      animation: tierwyn-diamond-float-bottom 2.4s ease-in-out infinite;
+    }
+    .app-loading-brand {
+      font-family: 'Syne', var(--ui);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.28em;
+      text-indent: 0.28em;
+      color: var(--accent);
+      margin-top: 24px;
+      line-height: 1;
+      text-shadow: 0 0 16px color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+    .app-loading-bar-track {
+      width: 140px;
+      height: 3px;
+      background: color-mix(in srgb, var(--accent) 15%, rgba(255, 255, 255, 0.05));
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 18px;
+      position: relative;
+    }
+    .app-loading-bar-thumb {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 45%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: tierwyn-bar-slide 1.6s ease-in-out infinite;
+    }
+    .app-loading-status {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-indent: 0.16em;
+      color: var(--text-3);
+      margin-top: 12px;
+      animation: tierwyn-text-pulse 2.4s ease-in-out infinite alternate;
+    }
+    @keyframes tierwyn-scaffold-breathe {
+      0% { opacity: 0.7; filter: drop-shadow(0 0 1px transparent); }
+      100% { opacity: 0.95; filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 40%, transparent)); }
+    }
+    @keyframes tierwyn-core-beat {
+      0% { transform: scale(0.94); opacity: 0.85; }
+      50% { transform: scale(1.04); opacity: 1; }
+      100% { transform: scale(0.94); opacity: 0.85; }
+    }
+    @keyframes tierwyn-diamond-float-middle {
+      0% { transform: translateY(0px) scale(0.96); opacity: 0.8; }
+      50% { transform: translateY(-4px) scale(1.03); opacity: 1; }
+      100% { transform: translateY(0px) scale(0.96); opacity: 0.8; }
+    }
+    @keyframes tierwyn-diamond-float-bottom {
+      0% { transform: translateY(0px) scale(0.96); opacity: 0.8; }
+      50% { transform: translateY(8px) scale(1.03); opacity: 1; }
+      100% { transform: translateY(0px) scale(0.96); opacity: 0.8; }
+    }
+    @keyframes tierwyn-glow-breathe {
+      0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.4; }
+      100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.9; }
+    }
+    @keyframes tierwyn-bar-slide {
+      0% { transform: translateX(-100%); }
+      50% { transform: translateX(120%); }
+      100% { transform: translateX(300%); }
+    }
+    @keyframes tierwyn-text-pulse {
+      0% { opacity: 0.5; }
+      100% { opacity: 0.95; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <!-- Static boot splash: shown on every full page load (including refresh) until React replaces #root. -->
+    <div class="app-loading-screen" role="status" aria-live="polite" aria-label="Loading Tierwyn">
+      <div class="app-loading-container">
+        <div class="app-loading-logo-wrap">
+          <div class="app-loading-glow" aria-hidden="true"></div>
+          <svg class="app-loading-svg" viewBox="256 172 512 680" role="img" aria-label="Tierwyn Logo">
+            <defs>
+              <filter id="tierwyn-core-glow-initial" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+            <path class="app-loading-scaffold" d="M 256,172 H 304 V 276 H 382.2 A 132 132 0 0 0 382.2,324 H 304 V 488 H 432 L 408,512 L 432,536 H 304 V 700 H 432 L 408,724 L 432,748 H 304 V 852 H 256 Z M 768,172 V 852 H 720 V 748 H 592 L 616,724 L 592,700 H 720 V 536 H 592 L 616,512 L 592,488 H 720 V 324 H 641.8 A 132 132 0 0 1 641.8,276 H 720 V 172 Z" />
+            <path class="app-loading-core" fill-rule="evenodd" filter="url(#tierwyn-core-glow-initial)" d="M 512,198 A 102 102 0 1 0 512,402 A 102 102 0 1 0 512,198 Z M 512,249 A 51 51 0 1 1 512,351 A 51 51 0 1 1 512,249 Z" />
+            <path class="app-loading-diamond app-loading-diamond-middle" fill-rule="evenodd" d="M 512,444 L 580,512 L 512,580 L 444,512 Z M 512,478 L 546,512 L 512,546 L 478,512 Z" />
+            <path class="app-loading-diamond app-loading-diamond-bottom" fill-rule="evenodd" d="M 512,656 L 580,724 L 512,792 L 444,724 Z M 512,690 L 546,724 L 512,758 L 478,724 Z" />
+          </svg>
+        </div>
+        <div class="app-loading-brand">TIERWYN</div>
+        <div class="app-loading-bar-track"><div class="app-loading-bar-thumb"></div></div>
+        <div class="app-loading-status">INITIALIZING…</div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

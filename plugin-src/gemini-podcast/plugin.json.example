@@ -1,0 +1,26 @@
+{
+  "id": "gemini-podcast",
+  "name": "Gemini Podcast",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "capabilities": [
+    {
+      "name": "podcast.script.generate",
+      "summary": "Write or edit a multi-speaker podcast script (Title: / Speaker N: format) with Gemini: write, podcastify, improve, lengthen, shorten, expressions, translate",
+      "agentCallable": true,
+      "rateLimitPerMin": 6,
+      "timeoutMs": 300000
+    },
+    {
+      "name": "podcast.audio.generate",
+      "summary": "Render a Speaker N: script (1–10 speakers) to one WAV/MP3 podcast file with Gemini TTS (multi-speaker or line-by-line)",
+      "agentCallable": true,
+      "rateLimitPerMin": 2,
+      "timeoutMs": 300000
+    }
+  ],
+  "credentials": [
+    { "key": "GEMINI_API_KEY", "required": true, "description": "Google AI Studio API key (aistudio.google.com/apikey)" }
+  ],
+  "permissions": ["outbound:https://generativelanguage.googleapis.com"]
+}

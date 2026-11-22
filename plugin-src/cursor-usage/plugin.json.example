@@ -1,0 +1,62 @@
+{
+  "id": "cursor-usage",
+  "name": "Cursor Usage",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "capabilities": [
+    {
+      "name": "usage.get",
+      "summary": "Current Cursor quota windows (fast requests, other models, Grok bot weekly)",
+      "agentCallable": true,
+      "rateLimitPerMin": 10,
+      "usageProvider": {
+        "label": "Cursor",
+        "matchAgent": "^(cursor|grok-bot)$",
+        "matchModel": ".*"
+      }
+    },
+    {
+      "name": "insights.get",
+      "summary": "Cursor Activity & Insights (account profile, daily activity, breakdown, spend limits)",
+      "agentCallable": false,
+      "rateLimitPerMin": 10
+    }
+  ],
+  "credentials": [
+    {
+      "key": "CURSOR_API_KEY",
+      "required": true,
+      "description": "Cursor User API Key (cursor.com/dashboard/api)"
+    }
+  ],
+  "permissions": [
+    "outbound:https://api2.cursor.sh",
+    "outbound:https://cursor.com"
+  ],
+  "settings": [
+    {
+      "key": "apiBaseUrl",
+      "type": "string",
+      "default": "https://api2.cursor.sh",
+      "description": "Cursor API Base URL"
+    },
+    {
+      "key": "webBaseUrl",
+      "type": "string",
+      "default": "https://cursor.com",
+      "description": "Cursor Web Base URL"
+    },
+    {
+      "key": "matchAgent",
+      "type": "string",
+      "default": "^(cursor|grok-bot)$",
+      "description": "Regex matching agent types for conversation usage"
+    },
+    {
+      "key": "matchModel",
+      "type": "string",
+      "default": ".*",
+      "description": "Regex matching model names for conversation usage"
+    }
+  ]
+}

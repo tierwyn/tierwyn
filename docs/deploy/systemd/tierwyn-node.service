@@ -1,0 +1,16 @@
+[Unit]
+Description=Tierwyn node (remote host daemon)
+After=network.target
+
+[Service]
+WorkingDirectory=%h/tierwyn-node
+ExecStart=/usr/bin/env node %h/tierwyn-node/apps/server/dist/node/main.js run
+Restart=always
+RestartSec=5
+KillMode=control-group
+# NODE_DIR unset so the node uses ~/.config/tierwyn/node.
+EnvironmentFile=-%h/.config/tierwyn/node/node.env
+# PATH gotcha: systemd user units do not inherit the login shell. Put agent CLI dirs in node.env.
+
+[Install]
+WantedBy=default.target

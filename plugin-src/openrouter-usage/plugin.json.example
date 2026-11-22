@@ -1,0 +1,49 @@
+{
+  "id": "openrouter-usage",
+  "name": "OpenRouter Usage",
+  "version": "2.0.1",
+  "apiVersion": 1,
+  "capabilities": [
+    {
+      "name": "usage.get",
+      "summary": "OpenRouter credits remaining per API key, plus account totals when the key may read them",
+      "agentCallable": true,
+      "rateLimitPerMin": 10,
+      "usageProvider": {
+        "label": "OpenRouter",
+        "matchAgent": "^openrouter$",
+        "matchModel": ".*"
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "key": "OPENROUTER_API_KEY",
+      "required": true,
+      "description": "OpenRouter API key, or a comma-separated list — Work=sk-or-v1-…,Personal=sk-or-v1-… (openrouter.ai/settings/keys)"
+    }
+  ],
+  "permissions": [
+    "outbound:https://openrouter.ai"
+  ],
+  "settings": [
+    {
+      "key": "baseUrl",
+      "type": "string",
+      "default": "https://openrouter.ai",
+      "description": "OpenRouter API Base URL"
+    },
+    {
+      "key": "matchAgent",
+      "type": "string",
+      "default": "^openrouter$",
+      "description": "Regex matching agent types for conversation usage (no adapter matches by default — widen only if an agent really bills to OpenRouter)"
+    },
+    {
+      "key": "matchModel",
+      "type": "string",
+      "default": ".*",
+      "description": "Regex matching model names for conversation usage"
+    }
+  ]
+}

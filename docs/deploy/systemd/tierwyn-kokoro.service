@@ -1,0 +1,23 @@
+[Unit]
+Description=Kokoro TTS (native, 127.0.0.1:8880)
+After=network-online.target
+Wants=network-online.target
+# Soft coupling: do NOT Wants=/Requires= this from tierwyn-prod*.service.
+
+[Service]
+Type=simple
+# Installed by `tierwyn sidecars`:
+#   ~/kokoro-venv              Python 3.12 venv (uv) with kokoro + a cpu / cuda / rocm PyTorch build
+#   ~/tierwyn-kokoro/server.py  copy of docs/deploy/kokoro/server.py
+#   ~/.config/tierwyn/kokoro.env  KOKORO_DEVICE=cpu|cuda (+ ROCm vars): edit + restart to switch
+# Model weights + voices download on first start to ~/.cache/huggingface.
+Environment=KOKORO_DEVICE=cpu
+EnvironmentFile=-%h/.config/tierwyn/kokoro.env
+EnvironmentFile=-%h/.config/tierwyn/kokoro.env
+ExecStart=%h/kokoro-venv/bin/python %h/tierwyn-kokoro/server.py --port 8880
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=0
+
+[Install]
+WantedBy=default.target

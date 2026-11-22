@@ -1,0 +1,49 @@
+{
+  "id": "kilo-usage",
+  "name": "Kilo Usage",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "capabilities": [
+    {
+      "name": "usage.get",
+      "summary": "Kilo prepaid credit balance per API key",
+      "agentCallable": true,
+      "rateLimitPerMin": 10,
+      "usageProvider": {
+        "label": "Kilo",
+        "matchAgent": "^kilocode$",
+        "matchModel": ".*"
+      }
+    }
+  ],
+  "credentials": [
+    {
+      "key": "KILO_API_KEY",
+      "required": true,
+      "description": "Kilo API key, or a comma-separated list — Work=kilo_…,Personal=kilo_… (kilo.ai profile → API keys)"
+    }
+  ],
+  "permissions": [
+    "outbound:https://api.kilo.ai"
+  ],
+  "settings": [
+    {
+      "key": "baseUrl",
+      "type": "string",
+      "default": "https://api.kilo.ai",
+      "description": "Kilo API Base URL"
+    },
+    {
+      "key": "matchAgent",
+      "type": "string",
+      "default": "^kilocode$",
+      "description": "Regex matching agent types for conversation usage"
+    },
+    {
+      "key": "matchModel",
+      "type": "string",
+      "default": ".*",
+      "description": "Regex matching model names for conversation usage"
+    }
+  ]
+}

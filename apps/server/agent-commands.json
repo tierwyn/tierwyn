@@ -1,0 +1,19 @@
+{
+  "commands": [
+    { "agentType": "claude-code", "name": "btw", "label": "Side question", "description": "Ask an ephemeral context-aware side question (does not affect this conversation)", "sourceDetail": "builtin" },
+    { "agentType": "claude-code", "name": "init", "label": "Init", "description": "Initialize project context (CLAUDE.md)", "sourceDetail": "builtin" },
+    { "agentType": "claude-code", "name": "clear", "label": "Clear", "description": "Clear conversation history", "sourceDetail": "builtin" },
+    { "agentType": "claude-code", "name": "compact", "label": "Compact", "description": "Compact conversation context", "sourceDetail": "builtin" },
+    { "agentType": "claude-code", "name": "cost", "label": "Cost", "description": "Show token usage and cost", "sourceDetail": "builtin" },
+    { "agentType": "claude-code", "name": "model", "label": "Model", "description": "Switch model", "sourceDetail": "builtin" },
+    { "agentType": "claude-code", "name": "agents", "label": "Agents", "description": "Manage subagents", "sourceDetail": "builtin" },
+    { "agentType": "claude-code", "name": "review", "label": "Review", "description": "Request a code review", "sourceDetail": "builtin" },
+
+    { "agentType": "opencode", "name": "init", "label": "Init", "description": "Initialize project context", "sourceDetail": "builtin" },
+    { "agentType": "opencode", "name": "clear", "label": "Clear", "description": "Clear conversation history", "sourceDetail": "builtin" },
+    { "agentType": "opencode", "name": "compact", "label": "Compact", "description": "Compact conversation context", "sourceDetail": "builtin" },
+    { "agentType": "opencode", "name": "agents", "label": "Agents", "description": "Manage agents", "sourceDetail": "builtin" },
+    { "agentType": "opencode", "name": "models", "label": "Models", "description": "List or switch models", "sourceDetail": "builtin" },
+    { "agentType": "opencode", "name": "share", "label": "Share", "description": "Share session", "sourceDetail": "builtin" }
+  ]
+}

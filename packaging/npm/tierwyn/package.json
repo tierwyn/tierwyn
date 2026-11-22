@@ -1,0 +1,24 @@
+{
+  "name": "tierwyn",
+  "version": "0.1.0",
+  "description": "Tierwyn installer CLI — global launcher for Tierwyn, a meta harness for coding agents",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tierwyn/tierwyn.git"
+  },
+  "bin": {
+    "tierwyn": "bin/tierwyn"
+  },
+  "files": [
+    "bin",
+    "install.sh"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "prepack": "cp ../../../scripts/install.sh install.sh"
+  },
+  "type": "module"
+}

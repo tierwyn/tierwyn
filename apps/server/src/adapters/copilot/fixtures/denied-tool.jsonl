@@ -1,0 +1,5 @@
+{"type":"assistant.turn_start","data":{"turnId":"0"},"id":"d1","timestamp":"2026-09-01T00:00:00.000Z"}
+{"type":"tool.execution_start","data":{"toolCallId":"toolu_denied_1","toolName":"shell","arguments":{"command":"git push origin main"}},"id":"d2","timestamp":"2026-09-01T00:00:01.000Z"}
+{"type":"tool.execution_complete","data":{"toolCallId":"toolu_denied_1","success":false,"error":{"code":"denied","message":"Tool not allowed: shell(git push)"}},"id":"d3","timestamp":"2026-09-01T00:00:02.000Z"}
+{"type":"assistant.message","data":{"messageId":"m-denied","content":"I cannot run git push.","toolRequests":[]},"id":"d4","timestamp":"2026-09-01T00:00:03.000Z"}
+{"type":"result","timestamp":"2026-09-01T00:00:04.000Z","sessionId":"aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee","exitCode":0,"usage":{"premiumRequests":0,"codeChanges":{"linesAdded":0,"linesRemoved":0,"filesModified":[]}}}

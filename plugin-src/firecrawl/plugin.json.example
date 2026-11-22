@@ -1,0 +1,18 @@
+{
+  "id": "firecrawl",
+  "name": "Firecrawl",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "capabilities": [
+    { "name": "web.scrape", "summary": "Fetch one URL as clean markdown, HTML and/or links, including JavaScript-rendered pages", "agentCallable": true, "rateLimitPerMin": 20, "timeoutMs": 150000 },
+    { "name": "web.search", "summary": "Search the web; returns URL, title and description, optionally with each result's page content", "agentCallable": true, "rateLimitPerMin": 20, "timeoutMs": 150000 },
+    { "name": "web.crawl", "summary": "Start an async crawl of a site (default 100 pages); returns a crawlId for web.crawl.status", "agentCallable": true, "rateLimitPerMin": 20, "timeoutMs": 45000 },
+    { "name": "web.crawl.status", "summary": "Get progress and a page of results for a crawl started with web.crawl", "agentCallable": true, "rateLimitPerMin": 20, "timeoutMs": 75000 },
+    { "name": "web.map", "summary": "List the URLs of a site, optionally ranked by a search term", "agentCallable": true, "rateLimitPerMin": 20, "timeoutMs": 150000 },
+    { "name": "web.extract", "summary": "Extract structured data from URLs using an LLM prompt and/or JSON Schema", "agentCallable": true, "rateLimitPerMin": 20, "timeoutMs": 150000 }
+  ],
+  "credentials": [
+    { "key": "FIRECRAWL_API_KEY", "required": true, "description": "Firecrawl API key (firecrawl.dev → API keys)" }
+  ],
+  "permissions": ["outbound:https://api.firecrawl.dev"]
+}

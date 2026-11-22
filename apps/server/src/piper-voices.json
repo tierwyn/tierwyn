@@ -1,0 +1,162 @@
+[
+  {
+    "id": "en_US-lessac-medium",
+    "label": "Lessac (US English)",
+    "language": "en_US",
+    "quality": "medium",
+    "onnxPath": "en/en_US/lessac/medium/en_US-lessac-medium.onnx",
+    "jsonPath": "en/en_US/lessac/medium/en_US-lessac-medium.onnx.json"
+  },
+  {
+    "id": "en_US-amy-medium",
+    "label": "Amy (US English)",
+    "language": "en_US",
+    "quality": "medium",
+    "onnxPath": "en/en_US/amy/medium/en_US-amy-medium.onnx",
+    "jsonPath": "en/en_US/amy/medium/en_US-amy-medium.onnx.json"
+  },
+  {
+    "id": "en_US-ryan-medium",
+    "label": "Ryan (US English)",
+    "language": "en_US",
+    "quality": "medium",
+    "onnxPath": "en/en_US/ryan/medium/en_US-ryan-medium.onnx",
+    "jsonPath": "en/en_US/ryan/medium/en_US-ryan-medium.onnx.json"
+  },
+  {
+    "id": "en_US-hfc_female-medium",
+    "label": "HFC Female (US English)",
+    "language": "en_US",
+    "quality": "medium",
+    "onnxPath": "en/en_US/hfc_female/medium/en_US-hfc_female-medium.onnx",
+    "jsonPath": "en/en_US/hfc_female/medium/en_US-hfc_female-medium.onnx.json"
+  },
+  {
+    "id": "en_US-hfc_male-medium",
+    "label": "HFC Male (US English)",
+    "language": "en_US",
+    "quality": "medium",
+    "onnxPath": "en/en_US/hfc_male/medium/en_US-hfc_male-medium.onnx",
+    "jsonPath": "en/en_US/hfc_male/medium/en_US-hfc_male-medium.onnx.json"
+  },
+  {
+    "id": "en_US-kusal-medium",
+    "label": "Kusal (US English)",
+    "language": "en_US",
+    "quality": "medium",
+    "onnxPath": "en/en_US/kusal/medium/en_US-kusal-medium.onnx",
+    "jsonPath": "en/en_US/kusal/medium/en_US-kusal-medium.onnx.json"
+  },
+  {
+    "id": "en_US-danny-low",
+    "label": "Danny (US English)",
+    "language": "en_US",
+    "quality": "low",
+    "onnxPath": "en/en_US/danny/low/en_US-danny-low.onnx",
+    "jsonPath": "en/en_US/danny/low/en_US-danny-low.onnx.json"
+  },
+  {
+    "id": "en_US-joe-medium",
+    "label": "Joe (US English)",
+    "language": "en_US",
+    "quality": "medium",
+    "onnxPath": "en/en_US/joe/medium/en_US-joe-medium.onnx",
+    "jsonPath": "en/en_US/joe/medium/en_US-joe-medium.onnx.json"
+  },
+  {
+    "id": "en_US-kristin-medium",
+    "label": "Kristin (US English)",
+    "language": "en_US",
+    "quality": "medium",
+    "onnxPath": "en/en_US/kristin/medium/en_US-kristin-medium.onnx",
+    "jsonPath": "en/en_US/kristin/medium/en_US-kristin-medium.onnx.json"
+  },
+  {
+    "id": "en_US-l2arctic-medium",
+    "label": "L2 Arctic (US English)",
+    "language": "en_US",
+    "quality": "medium",
+    "onnxPath": "en/en_US/l2arctic/medium/en_US-l2arctic-medium.onnx",
+    "jsonPath": "en/en_US/l2arctic/medium/en_US-l2arctic-medium.onnx.json"
+  },
+  {
+    "id": "en_GB-alan-medium",
+    "label": "Alan (British English)",
+    "language": "en_GB",
+    "quality": "medium",
+    "onnxPath": "en/en_GB/alan/medium/en_GB-alan-medium.onnx",
+    "jsonPath": "en/en_GB/alan/medium/en_GB-alan-medium.onnx.json"
+  },
+  {
+    "id": "en_GB-cori-medium",
+    "label": "Cori (British English)",
+    "language": "en_GB",
+    "quality": "medium",
+    "onnxPath": "en/en_GB/cori/medium/en_GB-cori-medium.onnx",
+    "jsonPath": "en/en_GB/cori/medium/en_GB-cori-medium.onnx.json"
+  },
+  {
+    "id": "en_GB-jenny_dioco-medium",
+    "label": "Jenny Dioco (British English)",
+    "language": "en_GB",
+    "quality": "medium",
+    "onnxPath": "en/en_GB/jenny_dioco/medium/en_GB-jenny_dioco-medium.onnx",
+    "jsonPath": "en/en_GB/jenny_dioco/medium/en_GB-jenny_dioco-medium.onnx.json"
+  },
+  {
+    "id": "en_GB-northern_english_male-medium",
+    "label": "Northern English Male (British English)",
+    "language": "en_GB",
+    "quality": "medium",
+    "onnxPath": "en/en_GB/northern_english_male/medium/en_GB-northern_english_male-medium.onnx",
+    "jsonPath": "en/en_GB/northern_english_male/medium/en_GB-northern_english_male-medium.onnx.json"
+  },
+  {
+    "id": "en_GB-alba-medium",
+    "label": "Alba (British English)",
+    "language": "en_GB",
+    "quality": "medium",
+    "onnxPath": "en/en_GB/alba/medium/en_GB-alba-medium.onnx",
+    "jsonPath": "en/en_GB/alba/medium/en_GB-alba-medium.onnx.json"
+  },
+  {
+    "id": "de_DE-thorsten-medium",
+    "label": "Thorsten (German)",
+    "language": "de_DE",
+    "quality": "medium",
+    "onnxPath": "de/de_DE/thorsten/medium/de_DE-thorsten-medium.onnx",
+    "jsonPath": "de/de_DE/thorsten/medium/de_DE-thorsten-medium.onnx.json"
+  },
+  {
+    "id": "es_ES-davefx-medium",
+    "label": "Davefx (Spanish)",
+    "language": "es_ES",
+    "quality": "medium",
+    "onnxPath": "es/es_ES/davefx/medium/es_ES-davefx-medium.onnx",
+    "jsonPath": "es/es_ES/davefx/medium/es_ES-davefx-medium.onnx.json"
+  },
+  {
+    "id": "fr_FR-siwis-medium",
+    "label": "Siwis (French)",
+    "language": "fr_FR",
+    "quality": "medium",
+    "onnxPath": "fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx",
+    "jsonPath": "fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json"
+  },
+  {
+    "id": "it_IT-riccardo-x_low",
+    "label": "Riccardo (Italian)",
+    "language": "it_IT",
+    "quality": "x_low",
+    "onnxPath": "it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx",
+    "jsonPath": "it/it_IT/riccardo/x_low/it_IT-riccardo-x_low.onnx.json"
+  },
+  {
+    "id": "nl_NL-mls-medium",
+    "label": "MLS (Dutch)",
+    "language": "nl_NL",
+    "quality": "medium",
+    "onnxPath": "nl/nl_NL/mls/medium/nl_NL-mls-medium.onnx",
+    "jsonPath": "nl/nl_NL/mls/medium/nl_NL-mls-medium.onnx.json"
+  }
+]

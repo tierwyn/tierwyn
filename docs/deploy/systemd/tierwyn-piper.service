@@ -1,0 +1,13 @@
+[Unit]
+Description=Tierwyn Piper multi-voice TTS wrapper
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%h/piper-venv/bin/python %h/tierwyn-piper/server.py
+Restart=on-failure
+RestartSec=3
+# ponytail: loopback-only; no reverse proxy, no auth; LAN reaches it only via Tierwyn's /tts proxy.
+
+[Install]
+WantedBy=default.target

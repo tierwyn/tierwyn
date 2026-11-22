@@ -1,0 +1,57 @@
+# Tierwyn: Caddy reverse-proxy example
+# Replace commandcentre.example.com with your actual hostname.
+# Caddy obtains and renews TLS certificates automatically via ACME/Let's Encrypt.
+#
+# Usage:
+#   cp Caddyfile.example /etc/caddy/Caddyfile   # or wherever Caddy reads its config
+#   # Edit the hostname and optionally the LAN-subnet allowlist below
+#   sudo systemctl reload caddy
+#
+# See docs/deploy/deployment.md for the full runbook.
+
+commandcentre.example.com {
+
+    # -------------------------------------------------------------------------
+    # Optional: restrict access to a LAN subnet (secondary layer; the
+    # password is the primary gate). Remove or comment out to allow any IP.
+    # -------------------------------------------------------------------------
+    # @allowed {
+    #     remote_ip 192.168.1.0/24
+    # }
+    # handle @allowed {
+    #     reverse_proxy 127.0.0.1:4173 {
+    #         # (header directives repeated below: Caddy requires them inside
+    #         # the proxy block; keep in sync if you enable this allowlist)
+    #         header_up X-Forwarded-For {remote_host}
+    #         header_up Connection {>Connection}
+    #         header_up Upgrade {>Upgrade}
+    #         transport http {
+    #             keepalive off
+    #         }
+    #     }
+    # }
+    # respond 403   # block everything else
+
+    # -------------------------------------------------------------------------
+    # Main reverse proxy: HTTP + WebSocket upgrade to the web preview.
+    # -------------------------------------------------------------------------
+    reverse_proxy 127.0.0.1:4173 {
+        # Forward the real client IP so Express's req.ip is correct (rate-limiter).
+        header_up X-Forwarded-For {remote_host}
+
+        # WebSocket upgrade: pass the Connection and Upgrade headers through.
+        # Caddy handles the upgrade automatically when these headers are forwarded.
+        header_up Connection {>Connection}
+        header_up Upgrade {>Upgrade}
+
+        # Forward cookies: Caddy passes all request headers by default, so
+        # Cookie is already forwarded. The lines below are explicit for clarity.
+        header_up Cookie {>Cookie}
+    }
+
+    # Caddy handles TLS automatically. A secure=true cookie works because
+    # Caddy terminates HTTPS and forwards as plain HTTP to 127.0.0.1:4173
+    # (the Vite preview, which proxies /ws and API paths to the API on :8788).
+    # Express sees req.secure=true only if TRUST_PROXY is set correctly.
+    # Default TRUST_PROXY=loopback is correct for this single-machine setup.
+}

@@ -1,0 +1,30 @@
+{
+  "id": "gemini-audiobook",
+  "name": "Gemini Audiobook",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "capabilities": [
+    {
+      "name": "audio.generate",
+      "summary": "Text-to-speech: synthesize one passage in one Gemini voice to a WAV or MP3 file",
+      "agentCallable": true,
+      "rateLimitPerMin": 10,
+      "timeoutMs": 120000
+    },
+    {
+      "name": "audiobook.generate.chapter",
+      "summary": "Narrate a full chapter (title, narrator + character voices, expression cues) to one audio file",
+      "agentCallable": true,
+      "rateLimitPerMin": 2,
+      "timeoutMs": 300000
+    }
+  ],
+  "credentials": [
+    {
+      "key": "GEMINI_API_KEY",
+      "required": true,
+      "description": "Google AI Studio API key (aistudio.google.com/apikey)"
+    }
+  ],
+  "permissions": ["outbound:https://generativelanguage.googleapis.com"]
+}
