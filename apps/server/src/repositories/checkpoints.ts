@@ -79,35 +79,51 @@ export function createCheckpoint(
 }
 
 export function listCheckpoints(db: Database, conversationId: string): Checkpoint[] {
-  // ponytail: correlated subqueries walk back to the nearest operator-authored
-  // prompt at-or-before the checkpoint's anchor event. Excludes source='subagent_notify'
-  // (silent child-agent turns — not operator-authored, would mislead the preview).
-  // Mirrors the listConversations pattern (repositories/conversations.ts).
-  return (db.prepare(
-    `SELECT c.*,
-       (SELECT json_extract(p.payload, '$.text')
-          FROM events p
-          JOIN sessions s ON s.id = p.session_id
-         WHERE s.conversation_id = c.conversation_id
-           AND p.type = 'prompt'
-           AND json_valid(p.payload)
-           AND (json_extract(p.payload, '$.source') IS NULL
-                OR json_extract(p.payload, '$.source') != 'subagent_notify')
-           AND (p.ts < c_e.ts OR (p.ts = c_e.ts AND p.seq <= c_e.seq))
-         ORDER BY p.ts DESC, p.seq DESC LIMIT 1) AS prompt_preview,
-       (SELECT COUNT(*) FROM events p
-          JOIN sessions s ON s.id = p.session_id
-         WHERE s.conversation_id = c.conversation_id
-           AND p.type = 'prompt'
-           AND json_valid(p.payload)
-           AND (json_extract(p.payload, '$.source') IS NULL
-                OR json_extract(p.payload, '$.source') != 'subagent_notify')
-           AND (p.ts < c_e.ts OR (p.ts = c_e.ts AND p.seq <= c_e.seq))) AS turn_index
-        FROM checkpoints c
-        JOIN events c_e ON c_e.id = c.event_id
-       WHERE c.conversation_id = ?
-       ORDER BY c.created_at ASC`,
-  ).all(conversationId) as Row[]).map(toCheckpoint);
+  // Single pass over checkpoints + single pass over operator-authored prompts,
+  // matched in O(C log P) instead of correlated subqueries per checkpoint
+  // (O(C * E) froze the server for ~19s on long conversations with 300+ checkpoints).
+  const rows = db.prepare(
+    `SELECT c.*, c_e.ts AS anchor_ts, c_e.seq AS anchor_seq
+       FROM checkpoints c
+       JOIN events c_e ON c_e.id = c.event_id
+      WHERE c.conversation_id = ?
+      ORDER BY c.created_at ASC`,
+  ).all(conversationId) as (Row & { anchor_ts: number; anchor_seq: number })[];
+
+  if (rows.length === 0) return [];
+
+  const prompts = db.prepare(
+    `SELECT p.ts, p.seq, json_extract(p.payload, '$.text') AS text
+       FROM events p
+       JOIN sessions s ON s.id = p.session_id
+      WHERE s.conversation_id = ?
+        AND p.type = 'prompt'
+        AND json_valid(p.payload)
+        AND (json_extract(p.payload, '$.source') IS NULL
+             OR json_extract(p.payload, '$.source') != 'subagent_notify')
+      ORDER BY p.ts ASC, p.seq ASC`,
+  ).all(conversationId) as { ts: number; seq: number; text: string | null }[];
+
+  return rows.map((r) => {
+    let lo = 0;
+    let hi = prompts.length - 1;
+    let idx = -1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      const p = prompts[mid];
+      if (p.ts < r.anchor_ts || (p.ts === r.anchor_ts && p.seq <= r.anchor_seq)) {
+        idx = mid;
+        lo = mid + 1;
+      } else {
+        hi = mid - 1;
+      }
+    }
+    return toCheckpoint({
+      ...r,
+      prompt_preview: idx >= 0 ? prompts[idx].text : null,
+      turn_index: idx + 1,
+    });
+  });
 }
 
 export function getCheckpoint(db: Database, id: string): Checkpoint | undefined {

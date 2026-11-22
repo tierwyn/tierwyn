@@ -69,6 +69,17 @@ export function upsertDiscoveredModels(db: Database, agentId: string, models: Mo
          AND id NOT IN (SELECT agent_model_id FROM sessions WHERE agent_model_id IS NOT NULL)
          AND id NOT IN (SELECT agent_model_id FROM events WHERE agent_model_id IS NOT NULL)`
   );
+  // Cheap indexed pre-check: prune/disable only touch enabled discovered rows
+  // missing from the new list. Skipping both when none exist avoids full-table
+  // scans of `events` (unindexed agent_model_id) on every discovery tick.
+  const hasStaleEnabled = db.prepare(
+    `SELECT 1 FROM agent_models
+      WHERE agent_id = @agent_id
+        AND source = 'discovered'
+        AND enabled_flag = 1
+        AND model_name NOT IN (SELECT value FROM json_each(@names))
+      LIMIT 1`
+  );
   // Stale-but-referenced rows: disable so they drop out of the picker without
   // breaking historical session FKs. Re-discovery that re-lists the same name
   // hits ON CONFLICT and preserves enabled_flag — so once disabled they stay
@@ -78,6 +89,7 @@ export function upsertDiscoveredModels(db: Database, agentId: string, models: Mo
         SET enabled_flag = 0
       WHERE agent_id = @agent_id
         AND source = 'discovered'
+        AND enabled_flag = 1
         AND model_name NOT IN (SELECT value FROM json_each(@names))
         AND (
           id IN (SELECT agent_model_id FROM sessions WHERE agent_model_id IS NOT NULL)
@@ -131,8 +143,10 @@ export function upsertDiscoveredModels(db: Database, agentId: string, models: Mo
     // json_each expects a JSON array string; empty array short-circuits the NOT IN
     // (which would otherwise match every row and wipe the agent's catalogue).
     const namesJson = JSON.stringify(rows.map((m) => m.name));
-    prune.run({ agent_id: agentId, names: namesJson });
-    disableStaleReferenced.run({ agent_id: agentId, names: namesJson });
+    if (hasStaleEnabled.get({ agent_id: agentId, names: namesJson })) {
+      prune.run({ agent_id: agentId, names: namesJson });
+      disableStaleReferenced.run({ agent_id: agentId, names: namesJson });
+    }
     applyOverrides.run({ agent_id: agentId });
   });
   tx(models);
