@@ -97,10 +97,12 @@ describe('withWritableNpmPrefix', () => {
     try {
       mkdirSync(join(home, 'bin'));
       writeFileSync(join(home, 'bin/npm'),
-        `#!/bin/sh\nif [ "$1" = prefix ]; then echo ${prefix.replace('$HOME', home)}; else echo "into=\${npm_config_prefix:-default}"; fi\n`, { mode: 0o755 });
+        // Like real npm, `prefix -g` honours an env prefix.
+        `#!/bin/sh\nif [ "$1" = prefix ]; then echo \${npm_config_prefix:-${prefix.replace('$HOME', home)}}; else echo "into=\${npm_config_prefix:-default}"; fi\n`, { mode: 0o755 });
       mkdirSync(join(home, 'np/lib'), { recursive: true });
+      const e = Object.fromEntries(Object.entries(env).map(([k, v]) => [k, v.replace('$HOME', home)]));
       const r = spawnSync('/bin/sh', ['-c', withWritableNpmPrefix('npm i -g x')], {
-        encoding: 'utf8', env: { PATH: `${join(home, 'bin')}:/usr/bin:/bin`, HOME: home, ...env },
+        encoding: 'utf8', env: { PATH: `${join(home, 'bin')}:/usr/bin:/bin`, HOME: home, ...e },
       });
       return r.stdout.trim().replace(home, '~') + (existsSync(join(home, '.npm-global/bin')) ? ' +dir' : '');
     } finally { rmSync(home, { recursive: true, force: true }); }
@@ -112,8 +114,11 @@ describe('withWritableNpmPrefix', () => {
   it('keeps a writable prefix', () => {
     expect(run('$HOME/np')).toBe('into=default');
   });
-  it('is a no-op when the prefix is already set in env', () => {
-    expect(run('/usr', { npm_config_prefix: '/opt/x' })).toBe('into=/opt/x');
+  it('keeps a writable prefix set in env', () => {
+    expect(run('/usr', { npm_config_prefix: '$HOME/np' })).toBe('into=~/np');
+  });
+  it('redirects a root-owned prefix set in env (npx exports npm_config_prefix=/usr)', () => {
+    expect(run('/usr', { npm_config_prefix: '/usr' })).toBe('into=~/.npm-global +dir');
   });
   it('a failing prereq prefix still stops the install', () => {
     const r = spawnSync('/bin/sh', ['-c', `false && ${withWritableNpmPrefix('npm i -g x')}; echo rc=$?`], { encoding: 'utf8' });

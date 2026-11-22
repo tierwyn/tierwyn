@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-22
+
+### Fixed
+
+- Setup run via `npx tierwyn` failed to install npm-based agents (pi, kilocode, codex, …) with `EACCES` when Node lives in a root-owned prefix (e.g. NodeSource under `/usr`). npx exports `npm_config_prefix`, which made the installer skip its `~/.npm-global` fallback; it now checks the effective prefix is writable.
+- npm launcher text: Linux-only (bash + systemd), not macOS; "meta-harness" spelled consistently.
+
 ## [0.1.0] - 2026-11-22
 
 ### Added
@@ -53,5 +60,6 @@ Initial public release of Tierwyn: a single-operator meta-harness for driving mu
 - Text-to-speech integration with local Piper and Kokoro TTS sidecars.
 - Built-in plugin capabilities including Firecrawl web search/scraping and Gemini media/audio generation.
 
-[unreleased]: https://github.com/tierwyn/tierwyn/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/tierwyn/tierwyn/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/tierwyn/tierwyn/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/tierwyn/tierwyn/releases/tag/v0.1.0

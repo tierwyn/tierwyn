@@ -11,7 +11,7 @@
     "tierwin": "bin/tierwin"
   },
   "dependencies": {
-    "tierwyn": "0.1.0"
+    "tierwyn": ">=0.1.0"
   },
   "engines": {
     "node": ">=22.13.0"

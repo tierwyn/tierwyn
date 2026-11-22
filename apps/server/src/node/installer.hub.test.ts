@@ -99,14 +99,19 @@ describe('install.sh: tierwyn hub …', () => {
 
   it('npm_writable_prefix exports ~/.npm-global only when the global prefix is not writable', () => {
     const stubNpm = (prefix: string) =>
-      `mkdir -p "$HOME/bin"; printf '#!/bin/bash\\n[[ $1 = prefix ]] && echo ${prefix}\\n' >"$HOME/bin/npm"; chmod +x "$HOME/bin/npm"; hash -r\n`;
+      // Like real npm, `prefix -g` honours an env prefix.
+      `mkdir -p "$HOME/bin"; printf '#!/bin/bash\\n[[ $1 = prefix ]] && echo \${npm_config_prefix:-${prefix}}\\n' >"$HOME/bin/npm"; chmod +x "$HOME/bin/npm"; hash -r\n`;
     // Root-owned prefix → redirected, npmrc untouched.
     expect(sourced(`${stubNpm('/usr')}npm_writable_prefix >/dev/null; echo "$npm_config_prefix"; [[ -e $HOME/.npmrc ]] && echo npmrc`))
       .toMatch(/\/\.npm-global$/);
     // Writable prefix → left alone.
     expect(sourced(`mkdir -p "$HOME/np/lib"; ${stubNpm('$HOME/np')}npm_writable_prefix; echo "[\${npm_config_prefix:-}]"`)).toBe('[]');
-    // Already configured → idempotent.
-    expect(sourced(`export npm_config_prefix=/opt/x; ${stubNpm('/usr')}npm_writable_prefix; echo "$npm_config_prefix"`)).toBe('/opt/x');
+    // Writable prefix set in env → kept.
+    expect(sourced(`mkdir -p "$HOME/np/lib"; export npm_config_prefix=$HOME/np; ${stubNpm('/usr')}npm_writable_prefix; echo "$npm_config_prefix"`))
+      .toMatch(/\/np$/);
+    // `npx tierwyn` exports npm_config_prefix=/usr → still redirected.
+    expect(sourced(`export npm_config_prefix=/usr; ${stubNpm('/usr')}npm_writable_prefix >/dev/null; echo "$npm_config_prefix"`))
+      .toMatch(/\/\.npm-global$/);
   });
 
   it('only hub mode writes TIERWYN_DEDICATED_HUB', () => {

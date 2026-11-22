@@ -32,8 +32,9 @@ export function buildPrereqPrefix(prereqs?: readonly string[]): string {
 const NPM_PREFIX_MARK = ': tierwyn-npm-prefix;';
 
 /** `npm i -g …` against a root-owned prefix (/usr) fails EACCES. Prefix the
- *  command with a runtime check: when no prefix is configured via env and the
- *  default global lib dir is not writable, point npm at ~/.npm-global for this
+ *  command with a runtime check: when the effective global lib dir (`npm prefix -g`
+ *  honours an env prefix; npm itself exports npm_config_prefix=/usr to children,
+ *  so an env prefix is not trusted blindly) is not writable, point npm at ~/.npm-global for this
  *  run only (env var — the operator's npmrc is never touched). ensureAgentPath
  *  already puts ~/.npm-global/bin on PATH. Non-npm commands pass through.
  *  ponytail: matches a leading `npm` only — an npm agent that gains `prereqs`
@@ -41,10 +42,9 @@ const NPM_PREFIX_MARK = ': tierwyn-npm-prefix;';
 export function withWritableNpmPrefix(cmd: string): string {
   if (!/^npm\s/.test(cmd) || cmd.includes(NPM_PREFIX_MARK)) return cmd;
   return (
-    `{ if [ -z "\${npm_config_prefix:-}\${NPM_CONFIG_PREFIX:-}" ]; then ` +
-    `_p=$(npm prefix -g 2>/dev/null); _d="$_p/lib/node_modules"; [ -d "$_d" ] || _d="$_p/lib"; ` +
-    `if [ -z "$_p" ] || [ ! -w "$_d" ]; then export npm_config_prefix="$HOME/.npm-global"; mkdir -p "$npm_config_prefix/bin" "$npm_config_prefix/lib"; fi; ` +
-    `fi; ${NPM_PREFIX_MARK} } && ${cmd}`
+    `{ _p=$(npm prefix -g 2>/dev/null); _d="$_p/lib/node_modules"; [ -d "$_d" ] || _d="$_p/lib"; ` +
+    `if [ -z "$_p" ] || [ ! -w "$_d" ]; then unset NPM_CONFIG_PREFIX; export npm_config_prefix="$HOME/.npm-global"; mkdir -p "$npm_config_prefix/bin" "$npm_config_prefix/lib"; fi; ` +
+    `${NPM_PREFIX_MARK} } && ${cmd}`
   );
 }
 

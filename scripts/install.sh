@@ -1437,12 +1437,14 @@ hub_preflight() {
 # `npm i -g` into a root-owned prefix fails EACCES. Point npm at ~/.npm-global for this
 # process only (env, never `npm config set`). Same rule as withWritableNpmPrefix() in
 # apps/server/src/node/install.ts (UI Install / Install-all / node agents.install).
+# No early return on an env prefix: `npx tierwyn` exports npm_config_prefix=/usr itself.
+# `npm prefix -g` honours the env, so a writable user-chosen prefix is still kept.
 npm_writable_prefix() {
-  [[ -n ${npm_config_prefix:-}${NPM_CONFIG_PREFIX:-} ]] && return 0
   have npm || return 0
   local p d; p=$(npm prefix -g 2>/dev/null) || p=""
   d="$p/lib/node_modules"; [[ -d $d ]] || d="$p/lib"
   [[ -n $p && -w $d ]] && return 0
+  unset NPM_CONFIG_PREFIX
   export npm_config_prefix="$HOME/.npm-global"
   mkdir -p "$npm_config_prefix/bin" "$npm_config_prefix/lib"
   hint "npm global prefix ${p:-?} not writable — installing into ~/.npm-global (on Tierwyn's PATH)"
