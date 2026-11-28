@@ -2205,6 +2205,18 @@ do_logs() { # target
 
 do_node_setup() {
   step "Node host setup (remote daemon — not the hub)"
+  # The node is a systemd *user* unit. Root (or sudo -iu / su) usually has no user
+  # bus, and the later `systemctl --user daemon-reload` would die under set -e with
+  # a bare "Failed to connect to bus". Fail up front with the actual fix.
+  if have systemctl && ! systemctl --user show-environment >/dev/null 2>&1; then
+    bad "systemd user session unavailable for $(id -un)"
+    (( EUID == 0 )) && hint "don't run the node as root: agents it spawns would have root on this machine"
+    hint "use a dedicated unprivileged user with linger:"
+    hint "  useradd -m -s /bin/bash tierwyn && loginctl enable-linger tierwyn"
+    hint "  machinectl shell tierwyn@   (not sudo -iu / su — they don't start a user bus; apt install systemd-container)"
+    hint "then re-run the node one-liner as that user"
+    die "node setup needs a systemd user session"
+  fi
   local missing=() t
   for t in git curl tar xz unzip; do have "$t" && ok "$t" || missing+=("$t"); done
   [[ ${#missing[@]} = 0 ]] || pkg_install "${missing[@]}"
