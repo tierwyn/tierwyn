@@ -11,7 +11,9 @@ const EXPECTED_IDS = [
   'firecrawl',
   'gemini-audiobook',
   'gemini-image',
+  'gemini-music',
   'gemini-podcast',
+  'gemini-video',
   'kilo-usage',
   'openrouter-usage',
   'zai-usage',
@@ -32,7 +34,7 @@ describe('scripts/package-plugins.mjs', () => {
     expect(gitLsFiles('plugin-archives')).toEqual(EXPECTED_ARCHIVES);
   });
 
-  it('generates the 8 plugin archives, produces byte-identical output, and passes layout checks', () => {
+  it('generates all plugin archives, produces byte-identical output, and passes layout checks', () => {
     const out1 = mkdtempSync(join(tmpdir(), 'pkg-test-1-'));
     const out2 = mkdtempSync(join(tmpdir(), 'pkg-test-2-'));
 
