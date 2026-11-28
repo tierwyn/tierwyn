@@ -143,6 +143,24 @@ describe('ClaudeCodeAdapter context-window % from usage', () => {
     const done = events.find((e) => e.type === 'status' && e.payload.status === 'done');
     expect(done!.type === 'status' && done!.payload.contextWindowPct).toBeUndefined();
   });
+
+  it('ignores the empty task-notification result emitted on resume, then ends on the real result', async () => {
+    const adapter = new CCAdapter();
+    await adapter.start({ sessionId: 's', conversationId: 'c-tn', cwd: '/tmp', model: 'claude-sonnet-4-6' });
+    const events: NormalisedEvent[] = [];
+    adapter.streamEvents().on('event', (e: NormalisedEvent) => events.push(e));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const h = (m: Record<string, unknown>) => (adapter as any)._handleSdkMessage(m);
+    // Shape captured from SDK 0.3.301 on resume with a stale background Bash task.
+    h({ type: 'result', is_error: false, num_turns: 0, usage: { output_tokens: 0 }, total_cost_usd: 1, origin: { kind: 'task-notification' } });
+    expect(events).toHaveLength(0);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((adapter as any)._turnClosing).toBe(false);
+    h({ type: 'assistant', message: { content: [{ type: 'text', text: 'hi' }] } });
+    h({ type: 'result', is_error: false, usage: { output_tokens: 3 }, total_cost_usd: 1 });
+    expect(events.some((e) => e.type === 'error')).toBe(false);
+    expect(events.some((e) => e.type === 'status' && e.payload.status === 'done')).toBe(true);
+  });
 });
 
 describe('ClaudeCodeAdapter rate limits from usage', () => {

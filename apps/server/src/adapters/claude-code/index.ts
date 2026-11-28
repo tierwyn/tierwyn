@@ -839,6 +839,15 @@ export class ClaudeCodeAdapter implements AgentAdapter {
       const fiveHourResetsAt = this._fiveHourResetsAt;
       const sevenDayPct = this._sevenDayPct;
       const sevenDayResetsAt = this._sevenDayResetsAt;
+      // On resume the CLI first runs a zero-token meta turn for a stale
+      // background-task notification ("didn't finish before the previous
+      // session ended") and emits its own result BEFORE our prompt runs.
+      // It is not our turn: no error card, no status, and keep the input
+      // stream open so the real result still closes the turn.
+      const origin = msg.origin as { kind?: string } | undefined;
+      if (origin?.kind === 'task-notification' && !isError && !this._turnProducedContent && !(outputTokens && outputTokens > 0)) {
+        return;
+      }
       if (isError) {
         const errors = (msg.errors as string[]) ?? [];
         // "Turn interrupted" style results from an intentional stop are not
