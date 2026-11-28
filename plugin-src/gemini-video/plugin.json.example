@@ -1,0 +1,23 @@
+{
+  "id": "gemini-video",
+  "name": "Gemini Video",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "capabilities": [
+    {
+      "name": "video.generate",
+      "summary": "Generate or edit video with Google Gemini Omni: 3–15 s MP4 clips with native audio from text, images, or a prior interaction",
+      "agentCallable": true,
+      "rateLimitPerMin": 2,
+      "timeoutMs": 300000
+    }
+  ],
+  "credentials": [
+    {
+      "key": "GEMINI_API_KEY",
+      "required": true,
+      "description": "Google AI Studio API key (aistudio.google.com/apikey); Gemini Omni video generation needs a paid-tier key"
+    }
+  ],
+  "permissions": ["outbound:https://generativelanguage.googleapis.com"]
+}
