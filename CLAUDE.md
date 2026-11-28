@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What Tierwyn Is
 
-**Tierwyn**, said "TEER-win"; *Tiers of agents. Stack the wins.* Tierwyn is a coding agent meta-harness; a web UI + API server that lets you drive multiple AI coding agents (15 CLIs: Claude Code, Pi, OpenCode, KiloCode, Antigravity, Cursor, Hermes, Codex, Grok Build, Kiro, Qwen Code, OpenClaw, Kimi Code, GitHub Copilot, DeepSeek; plus the Grok Bot desktop app) from a browser. It uses no Anthropic API key; it drives the `claude` CLI directly via `@anthropic-ai/claude-agent-sdk`.
+**Tierwyn**, said "TEER-win"; *Tiers of agents.* Tierwyn is a coding agent meta-harness; a web UI + API server that lets you drive multiple AI coding agents (15 CLIs: Claude Code, Pi, OpenCode, KiloCode, Antigravity, Cursor, Hermes, Codex, Grok Build, Kiro, Qwen Code, OpenClaw, Kimi Code, GitHub Copilot, DeepSeek; plus the Grok Bot desktop app) from a browser. It uses no Anthropic API key; it drives the `claude` CLI directly via `@anthropic-ai/claude-agent-sdk`.
 
 ## Commands
 

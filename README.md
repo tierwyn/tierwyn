@@ -45,13 +45,10 @@ Tierwyn drives the agent CLIs you have installed and signed in to, so every mode
 
 ## Screenshots
 
-![Main workspace: projects sidebar, spawn tree, remote host, and a live agent conversation](docs/media/workspace.png)
-<sub><b>Desktop workspace.</b> Projects, spawn tree, remote hosts, and live agent output.</sub>
-
 <p align="center">
-  <img src="docs/media/workspace-mobile.png" alt="Mobile PWA view of a live Tierwyn conversation" width="300" />
+  <img src="docs/media/workspace-devices.png" alt="Tierwyn desktop workspace and mobile PWA: projects sidebar, spawn tree, remote hosts, and a live agent conversation" width="960" />
   <br />
-  <sub><b>Mobile PWA.</b> Same conversation from your phone.</sub>
+  <sub><b>Desktop workspace &amp; mobile PWA.</b> Projects, spawn tree, remote hosts, and live agent output on desktop and phone.</sub>
 </p>
 
 <!-- MEDIA: additional screenshots. Uncomment when the PNGs exist in docs/media/.

@@ -4,7 +4,7 @@ Portable agent guide. Full reference: `CLAUDE.md`.
 
 ## What Tierwyn is
 
-**Tierwyn**, said "TEER-win": *Tiers of agents. Stack the wins.*
+**Tierwyn**, said "TEER-win": *Tiers of agents.*
 
 Web UI + API server that drives multiple AI coding agents (15 CLIs: Claude Code, Pi, OpenCode, KiloCode, Antigravity, Cursor, Hermes, Codex, Grok Build, Kiro, Qwen Code, OpenClaw, Kimi Code, GitHub Copilot, DeepSeek; plus the Grok Bot desktop app) from a browser. Spawns the `claude` CLI directly via `@anthropic-ai/claude-agent-sdk`. Single-user, no Anthropic API key.
 

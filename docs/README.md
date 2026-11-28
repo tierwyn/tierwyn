@@ -1,6 +1,6 @@
 # Tierwyn Documentation
 
-*Tierwyn: Tiers of agents. Stack the wins.*
+*Tierwyn: Tiers of agents.*
 
 Single documentation hub for Tierwyn product and architecture documentation. Every page below is
 reachable from this index.
