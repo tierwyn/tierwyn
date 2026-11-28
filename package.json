@@ -5,7 +5,7 @@
   "description": "A meta-harness for coding agents — one browser UI for the agents you already run",
   "license": "MIT",
   "author": "The Tierwyn Authors",
-  "homepage": "https://github.com/tierwyn/tierwyn#readme",
+  "homepage": "https://tierwyn.dev",
   "bugs": {
     "url": "https://github.com/tierwyn/tierwyn/issues"
   },
