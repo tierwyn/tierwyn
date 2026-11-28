@@ -1,0 +1,23 @@
+{
+  "id": "gemini-music",
+  "name": "Gemini Music",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "capabilities": [
+    {
+      "name": "music.generate",
+      "summary": "Generate music with Google Lyria: full songs or 30 s clips, instrumental or with vocals, to an MP3 or WAV file",
+      "agentCallable": true,
+      "rateLimitPerMin": 2,
+      "timeoutMs": 300000
+    }
+  ],
+  "credentials": [
+    {
+      "key": "GEMINI_API_KEY",
+      "required": true,
+      "description": "Google AI Studio API key (aistudio.google.com/apikey); Lyria needs a paid-tier key"
+    }
+  ],
+  "permissions": ["outbound:https://generativelanguage.googleapis.com"]
+}
